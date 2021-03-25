@@ -1,5 +1,7 @@
-let app_id = config.app_id;
-let app_key = config.app_key;
+require('dotenv').config();
+console.log(process.env);
+let app_id = process.env.app_id;
+let app_key = process.env.app_key;
 let b = false;
 let count = 0;
 let o = false;
