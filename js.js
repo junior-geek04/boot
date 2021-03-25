@@ -1,5 +1,5 @@
-let app_id = "ae9ec6b9";
-let app_key = "14b9a265b9446d71415e30308065834f";
+let app_id = config.app_id;
+let app_key = config.app_key;
 let b = false;
 let count = 0;
 let o = false;
