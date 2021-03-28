@@ -3,6 +3,7 @@ let app_key = config.app_key;
 let b = false;
 let count = 0;
 let o = false;
+let isdrop = false;
 
 let spinner =  `<div class="spinner-border text-primary" 
 id="spinner" role="status">
@@ -15,6 +16,7 @@ let modal = document.querySelector("#staticBackdrop");
 
 const button = document.getElementById("search");
 
+
 let counter = 0;
 const quantity = 10;
 
@@ -24,9 +26,39 @@ button.addEventListener("click", ()=>
     console.log(document.getElementById('inp').value);
     document.querySelector("#content").innerHTML = spinner;
     counter = 0;
+    count = 0;
     getData();
 
 })
+
+function dropdown(event)
+{
+    isdrop = true;
+    window.cuisine = event.dataset.cuisine;
+    counter = 0;
+    document.querySelector("#content").innerHTML = spinner;
+    dropdowndata();
+}
+
+function dropdowndata()
+{
+    const start = counter;
+    const end = start + quantity;
+    counter = end+1;
+    isdrop = true;
+
+    let app_id = "ae9ec6b9";
+    let app_key = "14b9a265b9446d71415e30308065834f";
+    fetch(`https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}&q&cuisineType=${window.cuisine}&from=${start}&to=${end}`)
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data);
+        d(data);
+    })
+    .catch(error =>{
+        window.location.reload();
+    })
+}
 
 
 function onl(){
@@ -34,7 +66,7 @@ function onl(){
     const start = counter;
     const end = start + quantity;
     counter = end+1;
-
+    
     let app_id = "ae9ec6b9";
     let app_key = "14b9a265b9446d71415e30308065834f";
     fetch(`https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}&q&cuisineType=indian&from=${start}&to=${end}`)
@@ -43,7 +75,6 @@ function onl(){
         console.log(data);
         d(data);
     });
-
 }
 
 function getData()
@@ -85,10 +116,9 @@ function d(data)
       ;
         document.querySelector("#content").appendChild(toAdd);
     }
-    if(b & !count){
-        console.log("yes")
+    if(b & !count || isdrop){
+        setTimeout(2000);
         document.querySelector("#content").scrollIntoView(true);
-
     }
 
     o = true;
@@ -98,14 +128,23 @@ function d(data)
 window.onscroll = () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight && o)
     {
-        if(!b)
+
+        if(isdrop)
         {
-            onl();
+            dropdowndata();
         }
         else
         {
-            count+=1;
-            getData();
+            if(!b)
+            {
+
+                onl();
+            }
+            else
+            {
+                count+=1;
+                getData();
+            }
         }
     }
 }
